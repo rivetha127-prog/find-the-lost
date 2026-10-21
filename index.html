@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CampusFind | Lost & Found</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+header {
+  background: #183c65;
+  color: white;
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+header h1 {
+  font-size: 26px;
+}
+
+header p {
+  margin-top: 5px;
+  font-size: 13px;
+  color: #dce8f5;
+}
+
+nav {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.hero {
+  padding: 55px 7%;
+  background: linear-gradient(120deg, #e0f2fe, #eff6ff);
+}
+
+.hero h2 {
+  font-size: clamp(28px, 5vw, 44px);
+  color: #183c65;
+  margin-bottom: 14px;
+}
+
+.hero p {
+  line-height: 1.7;
+  max-width: 620px;
+  color: #475569;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 32px 20px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.stat, .panel, .item-card {
+  background: white;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 18px #1020400c;
+}
+
+.stat h3 {
+  color: #2563eb;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  margin: 32px 0 18px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 17px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button.secondary {
+  background: #e2e8f0;
+  color: #172033;
+}
+
+form {
+  display: grid;
+  gap: 14px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font: inherit;
+  background: white;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.item-card h3 {
+  margin: 12px 0;
+}
+
+.item-card p {
+  color: #64748b;
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.tag {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notice {
+  background: #eff6ff;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.empty {
+  color: #64748b;
+  padding: 20px 0;
+}
+
+footer {
+  text-align: center;
+  background: #183c65;
+  color: white;
+  padding: 25px;
+  margin-top: 30px;
+  line-height: 1.8;
+}
+
+[hidden] {
+  display: none !important;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>🎒 CampusFind</h1>
+    <p>Lost something? Let's find it together.</p>
+  </div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#report">Report Item</a>
+    <a href="#matches">Matches</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h2>Lost it. Report it.<br>Find it again.</h2>
+  <p>A smarter lost-and-found platform for college students.
+     Report missing belongings, share found items, and discover
+     possible matches using our matching score.</p>
+
+  <div class="actions">
+    <button onclick="showReport('Lost')">I Lost Something</button>
+    <button class="secondary" onclick="showReport('Found')">
+      I Found Something
+    </button>
+  </div>
+</section>
+
+<main class="container">
+  <div class="stats">
+    <div class="stat">
+      <h3 id="totalCount">0</h3>
+      <p>Total Reports</p>
+    </div>
+    <div class="stat">
+      <h3 id="lostCount">0</h3>
+      <p>Lost Items</p>
+    </div>
+    <div class="stat">
+      <h3 id="foundCount">0</h3>
+      <p>Found Items</p>
+    </div>
+    <div class="stat">
+      <h3 id="matchCount">0</h3>
+      <p>Possible Matches</p>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="report">Report an Item</h2>
+
+  <div class="panel">
+    <div class="notice">
+      Enter accurate details to help identify possible matches.
+      Avoid posting personal phone numbers or sensitive ID details.
+    </div>
+
+    <form id="itemForm">
+      <div>
+        <label for="type">Report type</label>
+        <select id="type" required>
+          <option value="Lost">I lost an item</option>
+          <option value="Found">I found an item</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="name">Item name</label>
+        <input id="name" placeholder="e.g. Water Bottle" required>
+      </div>
+
+      <div>
+        <label for="category">Category</label>
+        <select id="category" required>
+          <option value="Bottle">Bottle</option>
+          <option value="Book">Book / Notebook</option>
+          <option value="ID Card">ID Card</option>
+          <option value="Bag">Bag</option>
+          <option value="Keys">Keys</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="colour">Colour</label>
+        <input id="colour" placeholder="e.g. Blue" required>
+      </div>
+
+      <div>
+        <label for="location">Campus location</label>
+        <input id="location" placeholder="e.g. Library" required>
+      </div>
+
+      <div>
+        <label for="date">Date lost or found</label>
+        <input id="date" type="date" required>
+      </div>
+
+      <div>
+        <label for="description">Additional details (optional)</label>
+        <textarea id="description"
+          placeholder="Describe the item without sharing private information"></textarea>
+      </div>
+
+      <button type="submit">Submit Report</button>
+    </form>
+  </div>
+
+  <h2 class="section-title" id="matches">Possible Matches</h2>
+  <div id="matchResults" class="grid"></div>
+
+  <h2 class="section-title">Recent Reports</h2>
+  <div id="itemList" class="grid"></div>
+</main>
+
+<footer>
+  <h3>CampusFind 🎒</h3>
+  <p>Helping campus communities reunite with lost belongings.</p>
+  <p>Student project prototype | C++ algorithm can be integrated
+     through a backend in a future version.</p>
+</footer>
+
+<script>
+let reports = [];
+
+try {
+  const saved = localStorage.getItem("campusFindReports");
+  reports = saved ? JSON.parse(saved) : [];
+  if (!Array.isArray(reports)) reports = [];
+} catch {
+  reports = [];
+}
+
+function saveReports() {
+  localStorage.setItem("campusFindReports", JSON.stringify(reports));
+}
+
+function showReport(type) {
+  document.getElementById("type").value = type;
+  document.getElementById("report").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function normal(value) {
+  return value.trim().toLowerCase();
+}
+
+function getScore(a, b) {
+  let score = 0;
+
+  if (normal(a.name) === normal(b.name)) score += 30;
+  else if (
+    normal(a.name).includes(normal(b.name)) ||
+    normal(b.name).includes(normal(a.name))
+  ) score += 15;
+
+  if (normal(a.category) === normal(b.category)) score += 25;
+  if (normal(a.colour) === normal(b.colour)) score += 20;
+  if (normal(a.location) === normal(b.location)) score += 15;
+  if (a.date === b.date) score += 10;
+
+  return score;
+}
+
+document.getElementById("itemForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const item = {
+    id: Date.now(),
+    type: document.getElementById("type").value,
+    name: document.getElementById("name").value.trim(),
+    category: document.getElementById("category").value,
+    colour: document.getElementById("colour").value.trim(),
+    location: document.getElementById("location").value.trim(),
+    date: document.getElementById("date").value,
+    description: document.getElementById("description").value.trim(),
+    closed: false
+  };
+
+  const duplicate = reports.some(r =>
+    r.type === item.type &&
+    normal(r.name) === normal(item.name) &&
+    normal(r.location) === normal(item.location) &&
+    r.date === item.date
+  );
+
+  if (duplicate && !confirm("A similar report exists. Add anyway?")) {
+    return;
+  }
+
+  reports.unshift(item);
+  saveReports();
+  this.reset();
+  render();
+  alert("Report added successfully!");
+});
+
+function render() {
+  const active = reports.filter(r => !r.closed);
+  const lost = active.filter(r => r.type === "Lost");
+  const found = active.filter(r => r.type === "Found");
+
+  const matches = [];
+
+  lost.forEach(a => {
+    found.forEach(b => {
+      const score = getScore(a, b);
+      if (score >= 40) matches.push({a, b, score});
+    });
+  });
+
+  document.getElementById("totalCount").textContent = active.length;
+  document.getElementById("lostCount").textContent = lost.length;
+  document.getElementById("foundCount").textContent = found.length;
+  document.getElementById("matchCount").textContent = matches.length;
+
+  const matchResults = document.getElementById("matchResults");
+
+  matchResults.innerHTML = matches.length
+    ? matches.map(m => `
+      <article class="item-card">
+        <span class="tag">Possible match: ${m.score}%</span>
+        <h3>${escapeHTML(m.a.name)} ↔ ${escapeHTML(m.b.name)}</h3>
+        <p>Lost report: ${escapeHTML(m.a.location)}</p>
+        <p>Found report: ${escapeHTML(m.b.location)}</p>
+        <p>Category: ${escapeHTML(m.a.category)}</p>
+        <p>Colour: ${escapeHTML(m.a.colour)}</p>
+        <p>Match scores are suggestions, not proof of ownership.</p>
+      </article>
+    `).join("")
+    : '<p class="empty">No possible matches yet. Add lost and found reports to get started.</p>';
+
+  const itemList = document.getElementById("itemList");
+
+  itemList.innerHTML = reports.length
+    ? reports.map(r => `
+      <article class="item-card">
+        <span class="tag">${escapeHTML(r.type)}</span>
+        <h3>${escapeHTML(r.name)}</h3>
+        <p>Category: ${escapeHTML(r.category)}</p>
+        <p>Colour: ${escapeHTML(r.colour)}</p>
+        <p>Location: ${escapeHTML(r.location)}</p>
+        <p>Date: ${escapeHTML(r.date)}</p>
+        <p>${escapeHTML(r.description)}</p>
+        <p>Status: ${r.closed ? "Closed / Returned" : "Active"}</p>
+        ${!r.closed ? `<button onclick="closeReport(${r.id})">Mark Returned</button>` : ""}
+      </article>
+    `).join("")
+    : '<p class="empty">No reports yet. Be the first to submit one!</p>';
+}
+
+function closeReport(id) {
+  const item = reports.find(r => r.id === id);
+  if (!item) return;
+
+  if (confirm("Close this report as returned?")) {
+    item.closed = true;
+    saveReports();
+    render();
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+render();
+</script>
+
+</body>
+</html>
